@@ -1,4 +1,5 @@
 import wollok.game.*
+import cultivos.*
 
 object personaje {
 	var property position = game.center()
@@ -7,11 +8,29 @@ object personaje {
 	method mover(direccion) {
 	  direccion.siguiente(position)
 	}
+    method validarSembrar() {
+      if (self.hayPlantaAca()) {
+        self.error("No puedo sembrar sobre otra planta")
+      }
+    }
+    method hayPlantaAca() {
+      return game.colliders(self) != []
+    }
+    method sembrar(planta) {
+      self.validarSembrar()
+      planta.fueSembradaEn(self.position())
+    }
+    method validarRegar() {
+      if (not self.hayPlantaAca()) {
+        self.error("No hay plantas para regar acá")
+      }
+    }
+    method regar() {
+      self.validarRegar()
+      const planta = game.uniqueCollider(self)
+      planta.fueRegada()
+    }
 }
-
-
-
-
 
 // DIRECCIONES
 object izquierda{
