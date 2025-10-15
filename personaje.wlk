@@ -1,17 +1,19 @@
 import wollok.game.*
 import cultivos.*
+import aspersor.*
 
 object personaje {
 	var property position = game.center()
-  const almacen = #{}
+  const almacen = []
 	const property image = "fplayer.png"
+  var dineroDeVentas = 0
 
 	method mover(direccion) {
 	  direccion.siguiente(position)
 	}
     method validarSembrar() {
       if (self.hayPlantaAca()) {
-        self.error("No puedo sembrar sobre otra planta")
+        self.error("No puedo sembrar sobre otra planta.")
       }
     }
     method hayPlantaAca() {
@@ -23,7 +25,7 @@ object personaje {
     }
     method validarRegar() {
       if (not self.hayPlantaAca()) {
-        self.error("No hay plantas para regar acá")
+        self.error("No hay plantas para regar acá.")
       }
     }
     method regar() {
@@ -33,12 +35,12 @@ object personaje {
     }
     method validarCosechar() {
       if (not self.hayPlantaAca()) {
-        self.error("No hay planta para cosechar acá")
+        self.error("No hay planta para cosechar acá.")
       }
     }
     method validarCosechar2() {
       if (self.laPlantaNoEstaLista()) {
-        self.error("La planta no esta lista para cosechar")
+        self.error("La planta no esta lista para cosechar.")
       }
     }
     method laPlantaNoEstaLista() {
@@ -49,6 +51,26 @@ object personaje {
       self.validarCosechar2()
       almacen.add(game.uniqueCollider(self))
       game.removeVisual(game.uniqueCollider(self))
+    }
+    method vender() {
+      almacen.forEach({cadaPlanta => dineroDeVentas += cadaPlanta.valorDeVenta()})
+      almacen.clear()
+    }
+    method mostrarInterfaz() {
+      game.say(self, 
+              "Tengo "+dineroDeVentas+ " monedas y " +almacen.size()+ " plantas para vender.")
+    }
+    method hayUnAspersor() {
+      return game.colliders(self) != []
+    }
+    method validarColocarAspersor() {
+      if(self.hayUnAspersor()) {
+        self.error("Ya hay un aspersor acá.")
+      }
+    }
+    method colocarAspersor() {
+      self.validarColocarAspersor()
+      aspersor.fueColocadoEn(self.position())
     }
 }
 

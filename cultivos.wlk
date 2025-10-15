@@ -15,6 +15,9 @@ class Maiz {
 	method fueRegada() {
 		esBebe = false
 	}
+	method valorDeVenta() {
+	  return 150
+	}
 }
 
 class Trigo {
@@ -35,6 +38,9 @@ class Trigo {
 	  if (evolucion >= 2) {
 		esBebe = false
 	  }
+	}
+	method valorDeVenta() {
+	  return (evolucion - 1) * 100
 	}
 }
 
@@ -68,6 +74,9 @@ class Tomaco {
 	}
 	method hayUnaPlantaArriba() {
 	  return game.getObjectsIn(position.up(1)) != []
+	}
+	method valorDeVenta() {
+	  return 80
 	}
 }
 
