@@ -422,3 +422,5 @@
 {"level":"info","message":"⌛ Building environment","timeElapsed":111,"timestamp":"2025-10-13T14:58:40.306Z"}
 {"level":"info","message":"⌛ Building environment","timeElapsed":195,"timestamp":"2025-10-13T14:58:41.319Z"}
 {"level":"info","message":"⌛ Building environment","timeElapsed":204,"timestamp":"2025-10-13T14:58:41.835Z"}
+{"level":"info","message":"⌛ Building environment","timeElapsed":143,"timestamp":"2025-10-13T15:00:17.380Z"}
+{"level":"info","message":"⌛ Validating cultivos.wlk","timeElapsed":141,"timestamp":"2025-10-13T15:00:17.522Z"}

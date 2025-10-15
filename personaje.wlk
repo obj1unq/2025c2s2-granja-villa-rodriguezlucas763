@@ -3,6 +3,7 @@ import cultivos.*
 
 object personaje {
 	var property position = game.center()
+  const almacen = #{}
 	const property image = "fplayer.png"
 
 	method mover(direccion) {
@@ -29,6 +30,25 @@ object personaje {
       self.validarRegar()
       const planta = game.uniqueCollider(self)
       planta.fueRegada()
+    }
+    method validarCosechar() {
+      if (not self.hayPlantaAca()) {
+        self.error("No hay planta para cosechar acá")
+      }
+    }
+    method validarCosechar2() {
+      if (self.laPlantaNoEstaLista()) {
+        self.error("La planta no esta lista para cosechar")
+      }
+    }
+    method laPlantaNoEstaLista() {
+      return game.uniqueCollider(self).esBebe()
+    }
+    method cosechar() {
+      self.validarCosechar()
+      self.validarCosechar2()
+      almacen.add(game.uniqueCollider(self))
+      game.removeVisual(game.uniqueCollider(self))
     }
 }
 

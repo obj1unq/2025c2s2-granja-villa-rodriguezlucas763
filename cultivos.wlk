@@ -2,12 +2,9 @@ import personaje.*
 import wollok.game.*
 
 class Maiz {
-	var position 
-	var esBebe = true
+	var property position 
+	var property esBebe = true
 
-	method position() {
-		return position
-	}
 	method image() {
 		// TODO: hacer que devuelva la imagen que corresponde
 		if (esBebe) {
@@ -16,19 +13,15 @@ class Maiz {
 		else return "corn_adult.png"
 	}
 	method fueRegada() {
-	  if (esBebe) {
-		esBebe = not esBebe
-	  }
+		esBebe = false
 	}
 }
 
 class Trigo {
-	var position 
+	var property position 
 	var evolucion = 0
+	var property esBebe = true
 
-	method position() {
-	  	return position
-	}
 	method image() {
 		// TODO: hacer que devuelva la imagen que corresponde
 	  	return "wheat_"+evolucion.toString()+".png"
@@ -38,28 +31,35 @@ class Trigo {
 		evolucion += 1
 	  }
 	  else evolucion = 0
+	  
+	  if (evolucion >= 2) {
+		esBebe = false
+	  }
 	}
 }
 
 class Tomaco {
-	var position 
+	var property position 
+	var property esBebe = true
 
-	method position() {
-	  	return position
-	}
 	method image() {
 		// TODO: hacer que devuelva la imagen que corresponde
-	  	return "tomaco_baby.png"
+		if (esBebe) {
+			return "tomaco_baby.png"
+		}
+		else return "tomaco.png"
 	}
 	method fueRegada() {
 		self.validarSiHayPlantaArriba()
+		esBebe = false
+
 		if (not self.estoyEnElBorde()) {
 			position = position.up(1) 
 		}
-		else position = position.y()
+		else position = game.at(position.x(), 0)
 	}
 	method estoyEnElBorde() {
-	  return position.y() == game.height()
+	  return position.y() == game.height() - 1
 	}
 	method validarSiHayPlantaArriba() {
 	  if (self.hayUnaPlantaArriba()){
@@ -67,7 +67,7 @@ class Tomaco {
 	  }
 	}
 	method hayUnaPlantaArriba() {
-	  
+	  return game.getObjectsIn(position.up(1)) != []
 	}
 }
 
