@@ -12,12 +12,12 @@ object personaje {
 	  direccion.siguiente(position)
 	}
     method validarSembrar() {
-      if (self.hayPlantaAca()) {
-        self.error("No puedo sembrar sobre otra planta.")
+      if (self.hayPlantaAca() || self.hayUnAspersor()) {
+        self.error("No puedo sembrar sobre otras cosas")
       }
     }
     method hayPlantaAca() {
-      return game.colliders(self) != []
+      return game.uniqueCollider(self).esPlanta()
     }
     method sembrar(planta) {
       self.validarSembrar()
@@ -61,11 +61,11 @@ object personaje {
               "Tengo "+dineroDeVentas+ " monedas y " +almacen.size()+ " plantas para vender.")
     }
     method hayUnAspersor() {
-      return game.colliders(self) != []
+      return game.uniqueCollider(self).esAspersor()
     }
     method validarColocarAspersor() {
-      if(self.hayUnAspersor()) {
-        self.error("Ya hay un aspersor acá.")
+      if(self.hayUnAspersor() || self.hayPlantaAca()) {
+        self.error("No puedo colocar el aspersor")
       }
     }
     method colocarAspersor() {

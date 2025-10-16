@@ -5,6 +5,9 @@ class Maiz {
 	var property position 
 	var property esBebe = true
 
+	method esPlanta() {
+	  return true
+	}
 	method image() {
 		// TODO: hacer que devuelva la imagen que corresponde
 		if (esBebe) {
@@ -25,6 +28,9 @@ class Trigo {
 	var evolucion = 0
 	var property esBebe = true
 
+	method esPlanta() {
+	  return true
+	}
 	method image() {
 		// TODO: hacer que devuelva la imagen que corresponde
 	  	return "wheat_"+evolucion.toString()+".png"
@@ -48,6 +54,9 @@ class Tomaco {
 	var property position 
 	var property esBebe = true
 
+	method esPlanta() {
+	  return true
+	}
 	method image() {
 		// TODO: hacer que devuelva la imagen que corresponde
 		if (esBebe) {
