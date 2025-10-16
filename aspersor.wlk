@@ -21,3 +21,14 @@ object aspersor {
   }
 }
 
+/*object direcciones {
+  var property position 
+
+  method norte() = position.up(1)
+  method sur()   = position.down(1)
+  method este()  = position.right(1)
+  method oeste() = position.left(1)
+
+  
+}
+*/

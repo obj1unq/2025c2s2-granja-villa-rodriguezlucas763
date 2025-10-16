@@ -8,16 +8,20 @@ object personaje {
 	const property image = "fplayer.png"
   var dineroDeVentas = 0
 
-	method mover(direccion) {
-	  direccion.siguiente(position)
-	}
+    method mover(direccion) {
+      direccion.siguiente(position)
+    }
     method validarSembrar() {
-      if (self.hayPlantaAca() || self.hayUnAspersor()) {
+      if (self.laCeldaEstaDisponible()) {
         self.error("No puedo sembrar sobre otras cosas")
       }
     }
+    method laCeldaEstaDisponible() {
+      return game.colliders(self) != []
+    }
     method hayPlantaAca() {
-      return game.uniqueCollider(self).esPlanta()
+      return game.colliders(self) != []
+    
     }
     method sembrar(planta) {
       self.validarSembrar()
@@ -60,11 +64,8 @@ object personaje {
       game.say(self, 
               "Tengo "+dineroDeVentas+ " monedas y " +almacen.size()+ " plantas para vender.")
     }
-    method hayUnAspersor() {
-      return game.uniqueCollider(self).esAspersor()
-    }
     method validarColocarAspersor() {
-      if(self.hayUnAspersor() || self.hayPlantaAca()) {
+      if(self.laCeldaEstaDisponible()) {
         self.error("No puedo colocar el aspersor")
       }
     }

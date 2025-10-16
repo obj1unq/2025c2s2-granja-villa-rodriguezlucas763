@@ -77,12 +77,12 @@ class Tomaco {
 	  return position.y() == game.height() - 1
 	}
 	method validarSiHayPlantaArriba() {
-	  if (self.hayUnaPlantaArriba()){
-		self.error("No puedo regar porque hay una planta arriba")
+	  if (self.laProximaCeldaEstaDisponible()){
+		self.error("No puedo regar porque hay algo arriba")
 	  }
 	}
-	method hayUnaPlantaArriba() {
-	  return game.getObjectsIn(position.up(1)) != []
+	method laProximaCeldaEstaDisponible() {
+	  return game.getObjectsIn(position.up(1)) != [] 
 	}
 	method valorDeVenta() {
 	  return 80
