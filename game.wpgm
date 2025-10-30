@@ -9,10 +9,25 @@ program farmville {
 	game.width(10)
 	game.ground("ground.png")
 
+	// MOVIMIENTO Y ACCIONES
+    keyboard.right().onPressDo({personaje.mover(derecha)})
+    keyboard.left().onPressDo({personaje.mover(izquierda)})
+    keyboard.up().onPressDo({personaje.mover(arriba)})
+    keyboard.down().onPressDo({personaje.mover(abajo)})
+
+	keyboard.m().onPressDo({personaje.sembrar(maiz)})
+	keyboard.t().onPressDo({personaje.sembrar(trigo)})
+	keyboard.o().onPressDo({personaje.sembrar(tomaco)})
+
+	keyboard.r().onPressDo({personaje.regar()})
+	keyboard.c().onPressDo({personaje.cosechar()})
+	keyboard.v().onPressDo({personaje.vender()})
+	keyboard.space().onPressDo({personaje.mostrarInterfaz()})
+	keyboard.a().onPressDo({personaje.colocarAspersor()})
+
 	//  VISUALES
  	game.addVisualCharacter(personaje)
- 	game.addVisual(new Maiz()) // Se agrega a modo de prueba
- 	
+
  	//  COMIENZA
 	game.start()
 }
