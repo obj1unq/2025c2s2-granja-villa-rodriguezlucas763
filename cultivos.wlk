@@ -5,9 +5,6 @@ class Maiz {
 	var property position 
 	var property esBebe = true
 
-	method esPlanta() {
-	  return true
-	}
 	method image() {
 		// TODO: hacer que devuelva la imagen que corresponde
 		if (esBebe) {
@@ -28,22 +25,17 @@ class Trigo {
 	var evolucion = 0
 	var property esBebe = true
 
-	method esPlanta() {
-	  return true
-	}
 	method image() {
 		// TODO: hacer que devuelva la imagen que corresponde
 	  	return "wheat_"+evolucion.toString()+".png"
 	}
 	method fueRegada() {
-	  if (evolucion < 3) {
-		evolucion += 1
-	  }
-	  else evolucion = 0
-	  
-	  if (evolucion >= 2) {
-		esBebe = false
-	  }
+		if (evolucion == 3) {
+			evolucion = 0
+		}
+		else evolucion += 1
+
+		esBebe = evolucion < 2
 	}
 	method valorDeVenta() {
 	  return (evolucion - 1) * 100
@@ -52,11 +44,8 @@ class Trigo {
 
 class Tomaco {
 	var property position 
-	var property esBebe = true
+	const property esBebe = false
 
-	method esPlanta() {
-	  return true
-	}
 	method image() {
 		// TODO: hacer que devuelva la imagen que corresponde
 		if (esBebe) {
@@ -65,8 +54,7 @@ class Tomaco {
 		else return "tomaco.png"
 	}
 	method fueRegada() {
-		self.validarSiHayPlantaArriba()
-		esBebe = false
+		self.validarProximaCeldaLibre()
 
 		if (not self.estoyEnElBorde()) {
 			position = position.up(1) 
@@ -76,13 +64,19 @@ class Tomaco {
 	method estoyEnElBorde() {
 	  return position.y() == game.height() - 1
 	}
-	method validarSiHayPlantaArriba() {
-	  if (self.laProximaCeldaEstaDisponible()){
-		self.error("No puedo regar porque hay algo arriba")
+	method validarProximaCeldaLibre() {
+	  if (not self.laProximaCeldaEstaDisponible()){
+		self.error("No puedo regar, la proxima celda esta ocupada")
 	  }
 	}
 	method laProximaCeldaEstaDisponible() {
-	  return game.getObjectsIn(position.up(1)) != [] 
+	  if (not self.estoyEnElBorde()) {									//Si estoy en el borde:
+		return game.getObjectsIn(self.position().up(1)).isEmpty()		//Me fijo que no haya nada arriba
+	  }
+	  else {															//Si no
+		return game.getObjectsIn(game.at(position.x(), 0)).isEmpty()	//Me fijo que no haya nada abajo de todo (donde iría la planta)
+	  }
+
 	}
 	method valorDeVenta() {
 	  return 80
@@ -96,6 +90,7 @@ object maiz {
 	}
 }
 object trigo {
+
 	method fueSembradaEn(posicion) {
 	  const nuevoTrigo = new Trigo(position = posicion)
 	  game.addVisual(nuevoTrigo)

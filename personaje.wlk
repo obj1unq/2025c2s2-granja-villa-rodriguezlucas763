@@ -4,75 +4,87 @@ import aspersor.*
 
 object personaje {
 	var property position = game.center()
+  const plantasSembradas = #{}
   const almacen = []
-	const property image = "fplayer.png"
   var dineroDeVentas = 0
 
-    method mover(direccion) {
-      direccion.siguiente(position)
+  // PERSONAJE -----------------------------------------------------
+  method mover(direccion) {
+    direccion.siguiente(position)
+  }
+  method image() {
+    return "fplayer.png"
+  }
+
+  // SEMBRAR -----------------------------------------------------
+  method validarSembrar() {
+    if (!self.laCeldaEstaDisponible()) {
+      self.error("No puedo sembrar sobre otras cosas")
     }
-    method validarSembrar() {
-      if (self.laCeldaEstaDisponible()) {
-        self.error("No puedo sembrar sobre otras cosas")
-      }
+  }
+  method laCeldaEstaDisponible() {
+    return game.colliders(self).isEmpty()                   //Verifica que la celda está vacia, sin contar al personaje
+  }
+  method sembrar(planta) {
+    self.validarSembrar()
+    plantasSembradas.add(position)                   //Guardo las posiciones donde sembré una planta
+    planta.fueSembradaEn(self.position())
+  }
+
+  // REGAR -----------------------------------------------------
+  method hayPlantaAca() {                                     //  Verifica que:
+    return !game.colliders(self).isEmpty()                    //-La celda no esta vacía (posiblemente innecesario si borro la posicion al cosechar)
+        && plantasSembradas.contains(self.position())         //-En esta posicion puse anteriormente una planta
+  }
+  method validarSiHayPlanta() {
+    if (!self.hayPlantaAca()) {
+      self.error("No hay planta acá.")
     }
-    method laCeldaEstaDisponible() {
-      return game.colliders(self) != []
+  }
+  method regar() {
+    self.validarSiHayPlanta()
+    game.uniqueCollider(self).fueRegada()
+  }
+
+  // COSECHAR -----------------------------------------------------
+  method validarCosechar() {
+    if (self.laPlantaNoEstaLista()) {
+      self.error("La planta no esta lista para cosechar.")
     }
-    method hayPlantaAca() {
-      return game.colliders(self) != []
+  }
+  method laPlantaNoEstaLista() {
+    return game.uniqueCollider(self).esBebe()
+  }
+  method cosechar() {
+    self.validarSiHayPlanta()
+    self.validarCosechar()
+
+    plantasSembradas.remove(position)
+    almacen.add(game.uniqueCollider(self))    
+    game.removeVisual(game.uniqueCollider(self))
     
+  }
+
+  // VENDER -----------------------------------------------------
+  method vender() {
+    almacen.forEach({cadaPlanta => dineroDeVentas += cadaPlanta.valorDeVenta()})
+    almacen.clear()
+  }
+  method mostrarInterfaz() {
+    game.say(self, "Tengo " + dineroDeVentas + " monedas y " 
+                  + almacen.size() + " plantas para vender.")
+  }
+
+  // COLOCAR ASPERSOR -----------------------------------------------------
+  method validarColocarAspersor() {
+    if(!self.laCeldaEstaDisponible()) {
+      self.error("No puedo colocar el aspersor")
     }
-    method sembrar(planta) {
-      self.validarSembrar()
-      planta.fueSembradaEn(self.position())
-    }
-    method validarRegar() {
-      if (not self.hayPlantaAca()) {
-        self.error("No hay plantas para regar acá.")
-      }
-    }
-    method regar() {
-      self.validarRegar()
-      const planta = game.uniqueCollider(self)
-      planta.fueRegada()
-    }
-    method validarCosechar() {
-      if (not self.hayPlantaAca()) {
-        self.error("No hay planta para cosechar acá.")
-      }
-    }
-    method validarCosechar2() {
-      if (self.laPlantaNoEstaLista()) {
-        self.error("La planta no esta lista para cosechar.")
-      }
-    }
-    method laPlantaNoEstaLista() {
-      return game.uniqueCollider(self).esBebe()
-    }
-    method cosechar() {
-      self.validarCosechar()
-      self.validarCosechar2()
-      almacen.add(game.uniqueCollider(self))
-      game.removeVisual(game.uniqueCollider(self))
-    }
-    method vender() {
-      almacen.forEach({cadaPlanta => dineroDeVentas += cadaPlanta.valorDeVenta()})
-      almacen.clear()
-    }
-    method mostrarInterfaz() {
-      game.say(self, 
-              "Tengo "+dineroDeVentas+ " monedas y " +almacen.size()+ " plantas para vender.")
-    }
-    method validarColocarAspersor() {
-      if(self.laCeldaEstaDisponible()) {
-        self.error("No puedo colocar el aspersor")
-      }
-    }
-    method colocarAspersor() {
-      self.validarColocarAspersor()
-      aspersor.fueColocadoEn(self.position())
-    }
+  }
+  method colocarAspersor() {
+    self.validarColocarAspersor()
+    aspersor.fueColocadoEn(self.position())
+  }
 }
 
 // DIRECCIONES

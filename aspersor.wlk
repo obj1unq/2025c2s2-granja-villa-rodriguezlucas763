@@ -2,9 +2,6 @@ import wollok.game.*
 class Aspersor {
   var property position
 
-	method esAspersor() {
-	  return true
-	}
   method image() {
     return "aspersor.png"
   }
