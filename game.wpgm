@@ -1,3 +1,4 @@
+import aspersor.*
 import wollok.game.*
 import personaje.*
 import cultivos.*

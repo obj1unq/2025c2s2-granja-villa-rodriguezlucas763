@@ -16,6 +16,7 @@ object personaje {
   method image() {
     return "fplayer.png"
   }
+  method fueRegada() {}
 
   // SEMBRAR -----------------------------------------------------
   method validarSembrar() {
@@ -39,12 +40,12 @@ object personaje {
   }
 
   // REGAR -----------------------------------------------------
-  method hayPlantaAca() {                                             //  Verifica que:
+  method hayPlantaAca(posicion) {                                             //  Verifica que:
     return !game.colliders(self).isEmpty()                            //-La celda no esta vacía (posiblemente innecesario si borro la posicion al cosechar)
-        && plantasSembradas.contains(position)                        //-En esta posicion puse anteriormente una planta
+        && plantasSembradas.contains(posicion)                        //-En esta posicion puse anteriormente una planta
   }
   method validarSiHayPlanta() {
-    if (!self.hayPlantaAca()) {
+    if (!self.hayPlantaAca(position)) {
       self.error("No hay planta acá.")
     }
   }
