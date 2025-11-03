@@ -4,7 +4,7 @@ import aspersor.*
 
 object personaje {
 	var property position = game.center()
-  const plantasSembradas = #{}
+  const plantasSembradas = []
   const almacen = []
   var dineroDeVentas = 0
 
@@ -27,14 +27,20 @@ object personaje {
   }
   method sembrar(planta) {
     self.validarSembrar()
-    plantasSembradas.add(position)                   //Guardo las posiciones donde sembré una planta
-    planta.fueSembradaEn(self.position())
+    self.recordarPlanta(position)                                   //Guardo las posiciones donde sembré una planta
+    planta.fueSembradaEn(position)
+  }
+  method recordarPlanta(posicion) {
+    plantasSembradas.add(posicion)
+  }
+  method olvidarPlanta(posicion) {
+    plantasSembradas.remove(posicion)
   }
 
   // REGAR -----------------------------------------------------
-  method hayPlantaAca() {                                     //  Verifica que:
-    return !game.colliders(self).isEmpty()                    //-La celda no esta vacía (posiblemente innecesario si borro la posicion al cosechar)
-        && plantasSembradas.contains(self.position())         //-En esta posicion puse anteriormente una planta
+  method hayPlantaAca() {                                             //  Verifica que:
+    return !game.colliders(self).isEmpty()                            //-La celda no esta vacía (posiblemente innecesario si borro la posicion al cosechar)
+        && plantasSembradas.contains(position)                        //-En esta posicion puse anteriormente una planta
   }
   method validarSiHayPlanta() {
     if (!self.hayPlantaAca()) {
@@ -59,7 +65,7 @@ object personaje {
     self.validarSiHayPlanta()
     self.validarCosechar()
 
-    plantasSembradas.remove(position)
+    self.olvidarPlanta(position)
     almacen.add(game.uniqueCollider(self))    
     game.removeVisual(game.uniqueCollider(self))
     
@@ -83,7 +89,7 @@ object personaje {
   }
   method colocarAspersor() {
     self.validarColocarAspersor()
-    aspersor.fueColocadoEn(self.position())
+    aspersor.fueColocadoEn(position)
   }
 }
 

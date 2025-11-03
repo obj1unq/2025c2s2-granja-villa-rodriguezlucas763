@@ -55,11 +55,13 @@ class Tomaco {
 	}
 	method fueRegada() {
 		self.validarProximaCeldaLibre()
+		personaje.olvidarPlanta(position)
 
 		if (not self.estoyEnElBorde()) {
 			position = position.up(1) 
 		}
 		else position = game.at(position.x(), 0)
+		personaje.recordarPlanta(position)
 	}
 	method estoyEnElBorde() {
 	  return position.y() == game.height() - 1
