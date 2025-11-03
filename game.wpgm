@@ -1,6 +1,8 @@
+import aspersor.*
 import wollok.game.*
 import personaje.*
 import cultivos.*
+import mercado.*
 
 program farmville {
 	//  CONFIG	
@@ -9,10 +11,44 @@ program farmville {
 	game.width(10)
 	game.ground("ground.png")
 
+	// MERCADOS
+	const mercado1 = new Mercado ( position    = game.at(1, 8),
+								   cantMonedas = 1000,
+								   mercaderia  = [])
+	personaje.conocerMercado(mercado1)
+
+	const mercado2 = new Mercado ( position    = game.at(4, 8),
+								   cantMonedas = 0,
+								   mercaderia  = [])
+	personaje.conocerMercado(mercado2)
+
+	const mercado3 = new Mercado ( position    = game.at(7, 8),
+								   cantMonedas = 500,
+								   mercaderia  = [])
+	personaje.conocerMercado(mercado3)
+
+	// MOVIMIENTO Y ACCIONES
+    keyboard.right().onPressDo({personaje.mover(derecha)})
+    keyboard.left().onPressDo({personaje.mover(izquierda)})
+    keyboard.up().onPressDo({personaje.mover(arriba)})
+    keyboard.down().onPressDo({personaje.mover(abajo)})
+
+	keyboard.m().onPressDo({personaje.sembrar(maiz)})
+	keyboard.t().onPressDo({personaje.sembrar(trigo)})
+	keyboard.o().onPressDo({personaje.sembrar(tomaco)})
+
+	keyboard.r().onPressDo({personaje.regar()})
+	keyboard.c().onPressDo({personaje.cosechar()})
+	keyboard.v().onPressDo({personaje.vender()})
+	keyboard.space().onPressDo({personaje.mostrarInterfaz()})
+	keyboard.a().onPressDo({personaje.colocarAspersor()})
+
 	//  VISUALES
  	game.addVisualCharacter(personaje)
- 	game.addVisual(new Maiz()) // Se agrega a modo de prueba
- 	
+	game.addVisual(mercado1)
+	game.addVisual(mercado2)
+	game.addVisual(mercado3)
+
  	//  COMIENZA
 	game.start()
 }
