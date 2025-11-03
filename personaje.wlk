@@ -5,7 +5,8 @@ import aspersor.*
 object personaje {
 	var property position = game.center()
   const plantasSembradas = []
-  const almacen = []
+  const mercadosDeLaZona = []
+  const plantasDelAlmacen = []
   var dineroDeVentas = 0
 
   // PERSONAJE -----------------------------------------------------
@@ -66,19 +67,43 @@ object personaje {
     self.validarCosechar()
 
     self.olvidarPlanta(position)
-    almacen.add(game.uniqueCollider(self))    
+    plantasDelAlmacen.add(game.uniqueCollider(self))    
     game.removeVisual(game.uniqueCollider(self))
     
   }
 
   // VENDER -----------------------------------------------------
   method vender() {
-    almacen.forEach({cadaPlanta => dineroDeVentas += cadaPlanta.valorDeVenta()})
-    almacen.clear()
+    self.validarEstoyEnElMercado()
+    self.validarSiTengoParaVender()
+    const mercadoActual = game.getObjectsIn(position.up(1)).first()
+    mercadoActual.vender(plantasDelAlmacen)
+  }
+  method lasPlantasFueronVendidas() {
+    plantasDelAlmacen.clear()
+  }
+  method recibirPago(cantMonedas) {
+    dineroDeVentas += cantMonedas
   }
   method mostrarInterfaz() {
     game.say(self, "Tengo " + dineroDeVentas + " monedas y " 
-                  + almacen.size() + " plantas para vender.")
+                  + plantasDelAlmacen.size() + " plantas para vender.")
+  }
+  method validarEstoyEnElMercado() {
+    if (!self.estoyEnElMercado()) {
+      self.error("No estoy en el mercado")
+    }
+  }
+  method estoyEnElMercado() {
+    return mercadosDeLaZona.contains(position.up(1))
+  }
+  method validarSiTengoParaVender() {
+    if( plantasDelAlmacen.isEmpty() ) {
+      self.error("No tengo plantas para vender.")
+    }
+  }
+  method conocerMercado(mercado) {
+    mercadosDeLaZona.add(mercado.position())
   }
 
   // COLOCAR ASPERSOR -----------------------------------------------------

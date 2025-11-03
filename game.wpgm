@@ -1,6 +1,7 @@
 import wollok.game.*
 import personaje.*
 import cultivos.*
+import mercado.*
 
 program farmville {
 	//  CONFIG	
@@ -8,6 +9,22 @@ program farmville {
 	game.height(10)
 	game.width(10)
 	game.ground("ground.png")
+
+	// MERCADOS
+	const mercado1 = new Mercado ( position    = game.at(1, 8),
+								   cantMonedas = 1000,
+								   mercaderia  = [])
+	personaje.conocerMercado(mercado1)
+
+	const mercado2 = new Mercado ( position    = game.at(4, 8),
+								   cantMonedas = 0,
+								   mercaderia  = [])
+	personaje.conocerMercado(mercado2)
+
+	const mercado3 = new Mercado ( position    = game.at(7, 8),
+								   cantMonedas = 500,
+								   mercaderia  = [])
+	personaje.conocerMercado(mercado3)
 
 	// MOVIMIENTO Y ACCIONES
     keyboard.right().onPressDo({personaje.mover(derecha)})
@@ -27,6 +44,9 @@ program farmville {
 
 	//  VISUALES
  	game.addVisualCharacter(personaje)
+	game.addVisual(mercado1)
+	game.addVisual(mercado2)
+	game.addVisual(mercado3)
 
  	//  COMIENZA
 	game.start()
